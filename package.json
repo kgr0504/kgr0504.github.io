@@ -1,0 +1,9 @@
+{
+  "name": "random-tool-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "deploy:vercel": "vercel --prod",
+    "deploy:cloudflare": "wrangler pages deploy . --project-name random-tool-studio"
+  }
+}

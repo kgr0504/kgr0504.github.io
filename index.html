@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="사다리타기, 돌림판, 범위 번호 뽑기를 한곳에서 쓰는 랜덤 추첨 도구입니다.">
+  <meta name="theme-color" content="#ff6b6b">
+  <title>랜덤툴 스튜디오 - 추첨 도구</title>
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9614308858326044" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#ladder" data-tool="ladder" aria-label="랜덤툴 스튜디오 홈">
+      <span class="brand-mark">R</span>
+      <span data-i18n="brand">랜덤툴 스튜디오</span>
+    </a>
+    <nav class="nav" aria-label="추첨 도구">
+      <a class="tab active" href="#ladder" data-tool="ladder" data-i18n="navLadder">사다리</a>
+      <a class="tab" href="#wheel" data-tool="wheel" data-i18n="navWheel">돌림판</a>
+      <a class="tab" href="#numbers" data-tool="numbers" data-i18n="navNumbers">번호뽑기</a>
+    </nav>
+    <select id="language-select" class="language-select" aria-label="Language">
+      <option value="ko">KO</option>
+      <option value="en">EN</option>
+      <option value="ja">JA</option>
+      <option value="es">ES</option>
+    </select>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow" data-i18n="heroEyebrow">Random draw playground</p>
+      <h1 data-i18n="heroTitle">사다리, 돌림판, 번호 뽑기를 한곳에서.</h1>
+    </section>
+
+    <section class="mode-panel tool-section active" id="ladder">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow" data-i18n="ladderEyebrow">Ladder game</p>
+          <h2 data-i18n="ladderTitle">사다리 타기</h2>
+        </div>
+        <button class="primary-button primary" type="button" data-action="ladder" data-i18n="ladderShuffle">사다리 섞기</button>
+      </div>
+      <div class="ladder-workspace">
+        <div class="ladder-toolbar">
+          <label>
+            <span data-i18n="ladderCount">사다리 개수</span>
+            <input id="ladder-count" type="number" min="2" max="12" value="6">
+          </label>
+          <button class="sample-button ghost" type="button" data-sample="ladder" data-i18n="sample">샘플 넣기</button>
+          <button class="sample-button action" type="button" data-action="ladder-results" data-i18n="showAll">전체 결과 보기</button>
+          <p class="hint" data-i18n="ladderHint">위쪽 참가자 번호를 누르면 사다리를 타고 내려갑니다.</p>
+        </div>
+        <div class="ladder-board">
+          <div id="ladder-name-editor" class="ladder-inline-editor" aria-label="사다리 참가자 입력"></div>
+          <canvas id="ladder-canvas" width="940" height="360" aria-label="사다리타기 화면"></canvas>
+          <div id="ladder-result-editor" class="ladder-inline-editor" aria-label="사다리 결과 입력"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mode-panel tool-section" id="wheel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow" data-i18n="wheelEyebrow">Spin wheel</p>
+          <h2 data-i18n="wheelTitle">돌림판 추첨</h2>
+        </div>
+      </div>
+      <div class="tool-layout">
+        <div class="input-panel">
+          <label for="wheel-items" data-i18n="wheelItems">돌림판 항목</label>
+          <textarea id="wheel-items" rows="12">피자 x2
+치킨
+커피
+아이스크림
+꽝 x3
+한 번 더</textarea>
+          <p class="hint" data-i18n="wheelHint"><strong>x2</strong>, <strong>*3</strong>는 조각을 여러 개 만들지 않고 그만큼 큰 조각으로 만듭니다.</p>
+          <button class="sample-button ghost" type="button" data-sample="wheel" data-i18n="sample">샘플 넣기</button>
+        </div>
+        <div class="wheel-stage">
+          <canvas id="wheel-canvas" width="940" height="560" aria-label="돌림판 화면"></canvas>
+          <button class="wheel-center-button primary" type="button" data-action="wheel" data-i18n="spin">돌리기</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="mode-panel tool-section" id="numbers">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow" data-i18n="numbersEyebrow">Number draw</p>
+          <h2 data-i18n="numbersTitle">범위 번호 뽑기</h2>
+        </div>
+        <button class="primary-button primary" type="button" data-action="numbers" data-i18n="drawNumbers">번호 뽑기</button>
+      </div>
+      <div class="tool-layout">
+        <div class="input-panel">
+          <div class="number-grid">
+            <label>
+              <span data-i18n="startNumber">시작 번호</span>
+              <input id="number-start" type="number" value="1">
+            </label>
+            <label>
+              <span data-i18n="endNumber">끝 번호</span>
+              <input id="number-end" type="number" value="30">
+            </label>
+            <label>
+              <span data-i18n="drawCount">뽑을 개수</span>
+              <input id="number-count" type="number" min="1" value="1">
+            </label>
+          </div>
+          <label for="number-exclude" data-i18n="excludeNumbers">제외할 번호</label>
+          <textarea id="number-exclude" rows="5" placeholder="예: 4, 13, 27" data-i18n-placeholder="excludePlaceholder"></textarea>
+          <button class="sample-button ghost" type="button" data-sample="numbers" data-i18n="numberSample">번호 샘플</button>
+        </div>
+        <div id="number-result" class="number-result" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="result-strip" aria-live="polite">
+      <span data-i18n="resultLabel">결과</span>
+      <strong id="result-text" data-result-key="initialResult">아직 추첨 전입니다.</strong>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms</a>
+    <a href="ads.txt">Ads.txt</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
