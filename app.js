@@ -275,11 +275,15 @@ function shuffle(items) {
   return copy;
 }
 
-function fitCanvas(canvas) {
+function fitCanvas(canvas, forceResize = false) {
   const ratio = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
-  canvas.width = Math.max(1, Math.round(rect.width * ratio));
-  canvas.height = Math.max(1, Math.round(rect.height * ratio));
+  const nextWidth = Math.max(1, Math.round(rect.width * ratio));
+  const nextHeight = Math.max(1, Math.round(rect.height * ratio));
+  if (forceResize || canvas.width !== nextWidth || canvas.height !== nextHeight) {
+    canvas.width = nextWidth;
+    canvas.height = nextHeight;
+  }
   const ctx = canvas.getContext("2d");
   ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
   return { ctx, width: rect.width, height: rect.height };
@@ -854,6 +858,7 @@ $$("[data-tool]").forEach((link) => {
 
 window.addEventListener("resize", () => {
   stopWheelSpin();
+  if ($(".tool-section.active")?.id === "wheel") fitCanvas(wheelCanvas, true);
   if ($(".tool-section.active")?.id === "ladder") renderLadderEditor();
   drawCurrentTool($(".tool-section.active")?.id || "ladder");
 });
