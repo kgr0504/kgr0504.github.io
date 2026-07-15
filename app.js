@@ -215,6 +215,8 @@ let ladderSegments = [];
 let wheelRotation = 0;
 let wheelItems = [];
 let wheelSpinning = false;
+let wheelFrameId = 0;
+let wheelSpinToken = 0;
 
 function lines(value) {
   return String(value).split(/\r?\n|,/).map((item) => item.trim()).filter(Boolean);
@@ -600,6 +602,18 @@ function getWheelItems() {
   return parseWeightedSlices($("#wheel-items").value, [`${t("result")} 1`, `${t("result")} 2`, `${t("result")} 3`]).slice(0, 60);
 }
 
+function stopWheelSpin(redraw = false) {
+  wheelSpinToken += 1;
+  if (wheelFrameId) {
+    cancelAnimationFrame(wheelFrameId);
+    wheelFrameId = 0;
+  }
+  wheelSpinning = false;
+  if (redraw && $(".tool-section.active")?.id === "wheel") {
+    drawWheel();
+  }
+}
+
 function drawWheel(rotation = wheelRotation) {
   const { ctx, width, height } = fitCanvas(wheelCanvas);
   wheelItems = getWheelItems();
@@ -652,6 +666,8 @@ function drawWheel(rotation = wheelRotation) {
 function runWheel() {
   if (wheelSpinning) return;
   wheelSpinning = true;
+  const spinToken = wheelSpinToken + 1;
+  wheelSpinToken = spinToken;
   const items = getWheelItems();
   const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
   const winningUnit = randomIndex(totalWeight);
@@ -680,19 +696,21 @@ function runWheel() {
   const started = performance.now();
 
   function step(now) {
+    if (spinToken !== wheelSpinToken) return;
     const t = Math.min(1, (now - started) / duration);
     const ease = 1 - Math.pow(1 - t, 4);
     wheelRotation = start + (end - start) * ease;
     drawWheel(wheelRotation);
     if (t < 1) {
-      requestAnimationFrame(step);
+      wheelFrameId = requestAnimationFrame(step);
       return;
     }
+    wheelFrameId = 0;
     wheelSpinning = false;
     setResult(`${t("wheelResult")}: ${items[winnerIndex].label}`);
   }
 
-  requestAnimationFrame(step);
+  wheelFrameId = requestAnimationFrame(step);
 }
 
 function runNumbers() {
@@ -741,6 +759,9 @@ function showTool(toolId) {
   if (!target) {
     showTool("ladder");
     return;
+  }
+  if (toolId !== "wheel") {
+    stopWheelSpin();
   }
   $$(".tool-section").forEach((section) => {
     section.classList.toggle("active", section.id === toolId);
@@ -795,6 +816,7 @@ $$(".ghost").forEach((button) => {
       renderLadderEditor();
     }
     if (sample === "wheel") {
+      stopWheelSpin();
       $("#wheel-items").value = translations[currentLang].wheelSample;
     }
     if (sample === "numbers") {
@@ -808,7 +830,10 @@ $$(".ghost").forEach((button) => {
 });
 
 ["wheel-items"].forEach((id) => {
-  $(`#${id}`).addEventListener("input", () => drawCurrentTool($(".tool-section.active")?.id || "ladder"));
+  $(`#${id}`).addEventListener("input", () => {
+    stopWheelSpin(true);
+    drawCurrentTool($(".tool-section.active")?.id || "ladder");
+  });
 });
 
 ["number-start", "number-end", "number-count", "number-exclude"].forEach((id) => {
@@ -816,6 +841,7 @@ $$(".ghost").forEach((button) => {
 });
 
 languageSelect?.addEventListener("change", () => {
+  stopWheelSpin();
   applyLanguage(languageSelect.value);
 });
 
@@ -827,8 +853,17 @@ $$("[data-tool]").forEach((link) => {
 });
 
 window.addEventListener("resize", () => {
+  stopWheelSpin();
   if ($(".tool-section.active")?.id === "ladder") renderLadderEditor();
   drawCurrentTool($(".tool-section.active")?.id || "ladder");
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) stopWheelSpin();
+});
+
+window.addEventListener("pagehide", () => {
+  stopWheelSpin();
 });
 
 renderLadderEditor();
