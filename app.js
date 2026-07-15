@@ -887,10 +887,15 @@ document.addEventListener("pointerdown", (event) => {
 }, { capture: true });
 
 window.addEventListener("resize", () => {
+  const activeTool = $(".tool-section.active")?.id || "ladder";
+  if (activeTool === "wheel") {
+    fitCanvas(wheelCanvas, true);
+    if (!wheelSpinning) drawWheel();
+    return;
+  }
   stopWheelSpin();
-  if ($(".tool-section.active")?.id === "wheel") fitCanvas(wheelCanvas, true);
-  if ($(".tool-section.active")?.id === "ladder") renderLadderEditor();
-  drawCurrentTool($(".tool-section.active")?.id || "ladder");
+  if (activeTool === "ladder") renderLadderEditor();
+  drawCurrentTool(activeTool);
 });
 
 document.addEventListener("visibilitychange", () => {
