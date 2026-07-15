@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TinyTools is a fast privacy-friendly collection of everyday web tools. Count words, resize images, generate QR codes, convert time zones, generate passwords, calculate percentages, convert units, pick colors, and draw random winners.">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="TinyTools">
+  <meta name="google-adsense-account" content="ca-pub-9614308858326044">
+  <title>TinyTools - Everyday Web Tools</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9614308858326044" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="styles.css?v=20260715-adsense-content-1">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#word-counter" aria-label="TinyTools home">
+      <span class="brand-mark">T</span>
+      <span>TinyTools</span>
+    </a>
+    <nav class="nav" aria-label="Tools">
+      <a href="#word-counter" data-i18n="nav.words">Words</a>
+      <a href="#image-resizer" data-i18n="nav.images">Images</a>
+      <a href="#qr-generator">QR</a>
+      <a href="#time-zone" data-i18n="nav.time">Time</a>
+      <a href="#password" data-i18n="nav.password">Password</a>
+      <a href="#percentage" data-i18n="nav.percent">Percent</a>
+      <a href="#unit-converter" data-i18n="nav.units">Units</a>
+      <a href="#color-picker" data-i18n="nav.colors">Colors</a>
+      <a href="#random-picker" data-i18n="nav.random">Random</a>
+    </nav>
+    <button id="install-app" class="install-button" type="button" hidden>Install</button>
+    <div class="language-menu">
+      <button id="language-toggle" class="language-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change language">
+        <span id="current-lang">EN</span>
+      </button>
+      <div id="language-options" class="language-options" role="menu">
+        <button type="button" data-lang="en" role="menuitem"><strong>EN</strong> English</button>
+        <button type="button" data-lang="ko" role="menuitem"><strong>KO</strong> 한국어</button>
+        <button type="button" data-lang="ja" role="menuitem"><strong>JA</strong> 日本語</button>
+        <button type="button" data-lang="es" role="menuitem"><strong>ES</strong> Español</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="hero.eyebrow">Fast, free, private</p>
+        <h1 id="hero-title" data-i18n="hero.title">Everyday web tools that work instantly.</h1>
+        <p class="hero-text" data-i18n="hero.text">No signup. No uploads to a server. Start with the tool you need and get back to work.</p>
+      </div>
+      <div class="quick-panel" aria-label="Available tools">
+        <a href="#word-counter" data-i18n="tools.word">Word Counter</a>
+        <a href="#image-resizer" data-i18n="tools.image">Image Resizer</a>
+        <a href="#qr-generator">QR Generator</a>
+        <a href="#time-zone" data-i18n="tools.time">Time Zone</a>
+        <a href="#password" data-i18n="tools.password">Password</a>
+        <a href="#percentage" data-i18n="tools.percent">Percent</a>
+        <a href="#unit-converter" data-i18n="tools.unit">Unit Converter</a>
+        <a href="#color-picker" data-i18n="tools.color">Color Picker</a>
+        <a href="#random-picker" data-i18n="tools.random">Random Picker</a>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="about-tools-title">
+      <div>
+        <p class="eyebrow">Why TinyTools exists</p>
+        <h2 id="about-tools-title">Simple browser tools for everyday work.</h2>
+        <p>
+          TinyTools is a lightweight collection of practical utilities for writing, images, QR codes, schedules,
+          passwords, calculations, measurements, color checks, and random picks. The tools are designed for quick
+          one-off tasks, so you can finish common work without creating an account or sending private files to a server.
+        </p>
+      </div>
+      <div class="content-grid">
+        <article class="info-card">
+          <h3>Private by default</h3>
+          <p>Text, images, passwords, and random lists are processed in your browser. The site does not upload your files for these tools.</p>
+        </article>
+        <article class="info-card">
+          <h3>Useful on mobile</h3>
+          <p>The layout is built for phones and desktop screens, so the same tool can be used at a desk or while checking something quickly.</p>
+        </article>
+        <article class="info-card">
+          <h3>No setup needed</h3>
+          <p>Open the page, choose a tool, and use it immediately. TinyTools focuses on small tasks that should not require a full app.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="tool-section" id="word-counter" aria-labelledby="word-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.writing">Writing</p>
+        <h2 id="word-title" data-i18n="tools.word">Word Counter</h2>
+        <p class="section-copy">Check character count, word count, sentence count, and estimated reading time for emails, captions, articles, essays, and notes.</p>
+      </div>
+      <div class="tool-grid">
+        <label class="input-block">
+          <span data-i18n="word.paste">Paste text</span>
+          <textarea id="word-input" rows="10" placeholder="Paste an email, article, caption, or essay..." data-i18n-placeholder="word.placeholder"></textarea>
+        </label>
+        <div class="result-grid" aria-live="polite">
+          <div class="metric"><span id="char-count">0</span><small data-i18n="word.characters">characters</small></div>
+          <div class="metric"><span id="word-count">0</span><small data-i18n="word.words">words</small></div>
+          <div class="metric"><span id="sentence-count">0</span><small data-i18n="word.sentences">sentences</small></div>
+          <div class="metric"><span id="read-time">0 min</span><small data-i18n="word.readingTime">reading time</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-section" id="image-resizer" aria-labelledby="image-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.images">Images</p>
+        <h2 id="image-title" data-i18n="tools.image">Image Resizer</h2>
+        <p class="section-copy">Resize a local image for thumbnails, profile pictures, blog uploads, or social posts without sending the image away from your device.</p>
+      </div>
+      <div class="tool-grid">
+        <div class="input-block">
+          <label for="image-input" data-i18n="image.choose">Choose image</label>
+          <input id="image-input" type="file" accept="image/*">
+          <div class="row">
+            <label>
+              <span data-i18n="image.width">Width</span>
+              <input id="image-width" type="number" min="1" placeholder="Width" data-i18n-placeholder="image.width">
+            </label>
+            <label>
+              <span data-i18n="image.height">Height</span>
+              <input id="image-height" type="number" min="1" placeholder="Height" data-i18n-placeholder="image.height">
+            </label>
+          </div>
+          <label class="check-row">
+            <input id="lock-ratio" type="checkbox" checked>
+            <span data-i18n="image.keepRatio">Keep aspect ratio</span>
+          </label>
+          <button id="resize-button" class="primary-button" type="button" data-i18n="image.resize">Resize image</button>
+        </div>
+        <div class="preview-panel">
+          <canvas id="image-canvas" width="640" height="360" aria-label="Resized image preview"></canvas>
+          <a id="download-image" class="secondary-button disabled" href="#" download="tinytools-resized.png" data-i18n="common.downloadPng">Download PNG</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-section" id="qr-generator" aria-labelledby="qr-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.sharing">Sharing</p>
+        <h2 id="qr-title">QR Generator</h2>
+        <p class="section-copy">Turn a link or short text into a QR code for menus, posters, classroom materials, event pages, or quick device-to-device sharing.</p>
+      </div>
+      <div class="tool-grid">
+        <div class="input-block">
+          <label>
+            <span data-i18n="qr.textUrl">Text or URL</span>
+            <textarea id="qr-input" rows="5" placeholder="https://example.com"></textarea>
+          </label>
+          <label>
+            <span data-i18n="qr.size">Size</span>
+            <input id="qr-size" type="range" min="160" max="640" step="40" value="320">
+          </label>
+          <button id="make-qr" class="primary-button" type="button" data-i18n="qr.generate">Generate QR</button>
+        </div>
+        <div class="preview-panel">
+          <canvas id="qr-canvas" class="square-canvas" width="320" height="320" aria-label="QR code preview"></canvas>
+          <a id="download-qr" class="secondary-button disabled" href="#" download="tinytools-qr.png" data-i18n="common.downloadPng">Download PNG</a>
+          <span id="qr-status" class="helper-text">Short URLs and text work best.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-section" id="time-zone" aria-labelledby="time-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.remote">Remote work</p>
+        <h2 id="time-title" data-i18n="tools.timeFull">Time Zone Converter</h2>
+        <p class="section-copy">Compare meeting times across major cities and avoid manual time-zone mistakes when planning remote work or international calls.</p>
+      </div>
+      <div class="tool-grid">
+        <div class="input-block">
+          <label>
+            <span data-i18n="time.pick">Pick date and time</span>
+            <input id="time-input" type="datetime-local">
+          </label>
+          <label>
+            <span data-i18n="common.from">From</span>
+            <select id="from-zone"></select>
+          </label>
+          <label>
+            <span data-i18n="common.to">To</span>
+            <select id="to-zone"></select>
+          </label>
+        </div>
+        <div class="time-output">
+          <p class="converted-label" data-i18n="time.converted">Converted time</p>
+          <strong id="converted-time">Select a time</strong>
+          <span id="converted-zone"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-section" id="password" aria-labelledby="password-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.security">Security</p>
+        <h2 id="password-title" data-i18n="tools.passwordFull">Password Generator</h2>
+        <p class="section-copy">Create random passwords locally in the browser and adjust length, numbers, and symbols for different account requirements.</p>
+      </div>
+      <div class="tool-grid">
+        <div class="input-block">
+          <label>
+            <span><span data-i18n="password.length">Length</span>: <strong id="length-value">16</strong></span>
+            <input id="password-length" type="range" min="8" max="48" value="16">
+          </label>
+          <label class="check-row"><input id="include-uppercase" type="checkbox" checked> <span data-i18n="password.uppercase">Uppercase</span></label>
+          <label class="check-row"><input id="include-numbers" type="checkbox" checked> <span data-i18n="password.numbers">Numbers</span></label>
+          <label class="check-row"><input id="include-symbols" type="checkbox" checked> <span data-i18n="password.symbols">Symbols</span></label>
+          <button id="generate-password" class="primary-button" type="button" data-i18n="password.generate">Generate password</button>
+        </div>
+        <div class="password-output">
+          <code id="password-result" data-i18n="password.click">Click generate</code>
+          <button id="copy-password" class="secondary-button" type="button" data-i18n="common.copy">Copy</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-section" id="percentage" aria-labelledby="percent-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.numbers">Numbers</p>
+        <h2 id="percent-title" data-i18n="tools.percentFull">Percentage Calculator</h2>
+        <p class="section-copy">Calculate discounts, growth, ratios, tax estimates, score changes, and everyday percentage questions without opening a spreadsheet.</p>
+      </div>
+      <div class="percent-tabs" role="tablist" aria-label="Percentage modes">
+        <button class="tab active" data-mode="of" type="button" data-i18n="percent.tabOf">What is X% of Y?</button>
+        <button class="tab" data-mode="increase" type="button" data-i18n="percent.tabIncrease">Increase by X%</button>
+        <button class="tab" data-mode="change" type="button" data-i18n="percent.tabChange">Percent change</button>
+      </div>
+      <div class="tool-grid">
+        <div class="input-block">
+          <label id="percent-a-label">
+            Percent
+            <input id="percent-a" type="number" value="20">
+          </label>
+          <label id="percent-b-label">
+            Number
+            <input id="percent-b" type="number" value="150">
+          </label>
+        </div>
+        <div class="time-output">
+          <p class="converted-label" data-i18n="common.result">Result</p>
+          <strong id="percent-result">30</strong>
+          <span id="percent-explain">20% of 150</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-section" id="unit-converter" aria-labelledby="unit-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.measurements">Measurements</p>
+        <h2 id="unit-title" data-i18n="tools.unit">Unit Converter</h2>
+        <p class="section-copy">Convert common length, weight, and temperature units for shopping, recipes, travel, study, and simple technical checks.</p>
+      </div>
+      <div class="tool-grid">
+        <div class="input-block">
+          <label>
+            <span data-i18n="unit.category">Category</span>
+            <select id="unit-category">
+              <option value="length" data-i18n="unit.length">Length</option>
+              <option value="weight" data-i18n="unit.weight">Weight</option>
+              <option value="temperature" data-i18n="unit.temperature">Temperature</option>
+            </select>
+          </label>
+          <label>
+            <span data-i18n="unit.value">Value</span>
+            <input id="unit-value" type="number" value="10">
+          </label>
+          <div class="row">
+            <label>
+              <span data-i18n="common.from">From</span>
+              <select id="unit-from"></select>
+            </label>
+            <label>
+              <span data-i18n="common.to">To</span>
+              <select id="unit-to"></select>
+            </label>
+          </div>
+        </div>
+        <div class="time-output">
+          <p class="converted-label" data-i18n="unit.converted">Converted value</p>
+          <strong id="unit-result">0</strong>
+          <span id="unit-explain"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-section" id="color-picker" aria-labelledby="color-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.design">Design</p>
+        <h2 id="color-title" data-i18n="tools.color">Color Picker</h2>
+        <p class="section-copy">Preview colors, copy HEX/RGB values, and check quick color choices for small design tasks, thumbnails, documents, and UI drafts.</p>
+      </div>
+      <div class="tool-grid">
+        <div class="input-block">
+          <label>
+            <span data-i18n="color.pick">Pick color</span>
+            <input id="color-input" class="color-control" type="color" value="#0f766e">
+          </label>
+          <label>
+            <span data-i18n="color.hex">Hex</span>
+            <input id="hex-value" type="text" value="#0f766e">
+          </label>
+          <button id="copy-color" class="primary-button" type="button" data-i18n="color.copyHex">Copy hex</button>
+        </div>
+        <div class="color-output">
+          <div id="color-swatch" class="color-swatch" aria-label="Selected color preview"></div>
+          <div class="color-values">
+            <strong id="color-hex">#0f766e</strong>
+            <span id="color-rgb">rgb(15, 118, 110)</span>
+            <span id="color-hsl">hsl(175, 77%, 26%)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool-section" id="random-picker" aria-labelledby="random-title">
+      <div class="section-head">
+        <p class="eyebrow" data-i18n="sections.lists">Lists</p>
+        <h2 id="random-title" data-i18n="tools.random">Random Picker</h2>
+        <p class="section-copy">Pick one result from a list for giveaways, classroom choices, dinner ideas, simple team decisions, or any fair random selection.</p>
+      </div>
+      <div class="tool-grid">
+        <label class="input-block">
+          <span data-i18n="random.onePerLine">One item per line</span>
+          <textarea id="random-input" rows="8" placeholder="Alice&#10;Brian&#10;Chris&#10;Dana"></textarea>
+          <button id="pick-random" class="primary-button" type="button" data-i18n="random.pickOne">Pick one</button>
+        </label>
+        <div class="time-output">
+          <p class="converted-label" data-i18n="random.picked">Picked item</p>
+          <strong id="random-result" data-i18n="random.addList">Add a list</strong>
+          <span id="random-count">0 items ready</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section faq-section" aria-labelledby="faq-title">
+      <div>
+        <p class="eyebrow">FAQ</p>
+        <h2 id="faq-title">Common questions</h2>
+      </div>
+      <div class="faq-grid">
+        <article class="info-card">
+          <h3>Are my files uploaded?</h3>
+          <p>No. Image resizing and text-based tools run in the browser, so the site does not need to upload your files for normal use.</p>
+        </article>
+        <article class="info-card">
+          <h3>Can I use TinyTools on a phone?</h3>
+          <p>Yes. The tools are responsive and can be installed from supported browsers as a lightweight web app.</p>
+        </article>
+        <article class="info-card">
+          <h3>Does the password tool store passwords?</h3>
+          <p>No. Passwords are generated locally and are not saved by TinyTools. Copy only the passwords you want to keep.</p>
+        </article>
+        <article class="info-card">
+          <h3>Why combine many tools on one page?</h3>
+          <p>Small tasks are easier when related utilities are in one predictable place, especially for users who move between mobile and desktop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span data-i18n="footer.local">TinyTools runs in your browser.</span>
+    <nav class="footer-links" aria-label="Footer links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="#word-counter" data-i18n="footer.top">Back to top</a>
+    </nav>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
