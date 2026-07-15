@@ -856,6 +856,13 @@ $$("[data-tool]").forEach((link) => {
   });
 });
 
+document.addEventListener("pointerdown", (event) => {
+  const toolLink = event.target.closest("[data-tool]");
+  if (toolLink && toolLink.dataset.tool !== "wheel") {
+    stopWheelSpin();
+  }
+}, { capture: true });
+
 window.addEventListener("resize", () => {
   stopWheelSpin();
   if ($(".tool-section.active")?.id === "wheel") fitCanvas(wheelCanvas, true);
