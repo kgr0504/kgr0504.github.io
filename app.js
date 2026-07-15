@@ -217,6 +217,7 @@ let wheelItems = [];
 let wheelSpinning = false;
 let wheelFrameId = 0;
 let wheelSpinToken = 0;
+let wheelFallbackId = 0;
 let activeToolId = "ladder";
 const resultState = {
   ladder: { key: "initialResult", text: "" },
@@ -621,16 +622,53 @@ function getWheelItems() {
   return parseWeightedSlices($("#wheel-items").value, [`${t("result")} 1`, `${t("result")} 2`, `${t("result")} 3`]).slice(0, 60);
 }
 
+function normalizeAngle(angle) {
+  const fullTurn = Math.PI * 2;
+  return ((angle % fullTurn) + fullTurn) % fullTurn;
+}
+
+function getWheelPointerItem(rotation, items) {
+  const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+  const pointerAngle = -Math.PI / 2;
+  const pointerInWheel = normalizeAngle(pointerAngle - rotation);
+  let cursor = 0;
+
+  for (const item of items) {
+    cursor += (Math.PI * 2) * (item.weight / totalWeight);
+    if (pointerInWheel <= cursor) return item;
+  }
+
+  return items[items.length - 1];
+}
+
 function stopWheelSpin(redraw = false) {
   wheelSpinToken += 1;
   if (wheelFrameId) {
     cancelAnimationFrame(wheelFrameId);
     wheelFrameId = 0;
   }
+  if (wheelFallbackId) {
+    clearTimeout(wheelFallbackId);
+    wheelFallbackId = 0;
+  }
   wheelSpinning = false;
   if (redraw && $(".tool-section.active")?.id === "wheel") {
     drawWheel();
   }
+}
+
+function finishWheelSpin(spinToken, rotation, items) {
+  if (spinToken !== wheelSpinToken) return;
+  if (wheelFallbackId) {
+    clearTimeout(wheelFallbackId);
+    wheelFallbackId = 0;
+  }
+  wheelFrameId = 0;
+  wheelSpinning = false;
+  wheelRotation = rotation;
+  drawWheel(wheelRotation);
+  const winner = getWheelPointerItem(wheelRotation, items);
+  setResult(`${t("wheelResult")}: ${winner.label}`, "wheel");
 }
 
 function drawWheel(rotation = wheelRotation) {
@@ -724,12 +762,11 @@ function runWheel() {
       wheelFrameId = requestAnimationFrame(step);
       return;
     }
-    wheelFrameId = 0;
-    wheelSpinning = false;
-    setResult(`${t("wheelResult")}: ${items[winnerIndex].label}`, "wheel");
+    finishWheelSpin(spinToken, end, items);
   }
 
   wheelFrameId = requestAnimationFrame(step);
+  wheelFallbackId = setTimeout(() => finishWheelSpin(spinToken, end, items), duration + 450);
 }
 
 function runNumbers() {
