@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="사다리타기, 돌림판, 범위 번호 뽑기를 한곳에서 쓰는 랜덤 추첨 도구입니다.">
+  <meta name="description" content="랜덤툴 스튜디오는 사다리타기, 돌림판, 범위 번호 뽑기를 브라우저에서 바로 사용할 수 있는 무료 랜덤 추첨 도구 모음입니다.">
   <meta name="theme-color" content="#ff6b6b">
-  <title>랜덤툴 스튜디오 - 추첨 도구</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="google-adsense-account" content="ca-pub-9614308858326044">
+  <title>랜덤툴 스튜디오 - 사다리, 돌림판, 번호 뽑기</title>
+  <link rel="stylesheet" href="styles.css?v=20260715-content-1">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9614308858326044" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -32,6 +33,29 @@
     <section class="hero">
       <p class="eyebrow" data-i18n="heroEyebrow">Random draw playground</p>
       <h1 data-i18n="heroTitle">사다리, 돌림판, 번호 뽑기를 한곳에서.</h1>
+      <p class="hero-copy">팀 순서 정하기, 이벤트 당첨자 선정, 게임 벌칙 정하기, 발표 순서 뽑기처럼 빠른 랜덤 선택이 필요할 때 바로 쓰는 브라우저 추첨 도구입니다.</p>
+    </section>
+
+    <section class="content-section" aria-labelledby="why-title">
+      <div>
+        <p class="eyebrow">What this site does</p>
+        <h2 id="why-title">가볍게 쓰는 공정한 랜덤 선택 도구</h2>
+        <p>랜덤툴 스튜디오는 복잡한 가입이나 설치 없이 사다리타기, 돌림판, 번호 뽑기를 바로 실행할 수 있게 만든 웹 도구입니다. 입력한 이름과 항목은 브라우저 안에서 처리되며, 회의, 방송, 수업, 모임, 이벤트처럼 결과를 빠르게 보여줘야 하는 상황에 맞춰 만들었습니다.</p>
+      </div>
+      <div class="info-grid">
+        <article class="info-card">
+          <h3>직접 입력</h3>
+          <p>참가자 이름, 결과, 돌림판 항목, 번호 범위를 직접 바꿔서 상황에 맞는 추첨을 만들 수 있습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3>보이는 진행</h3>
+          <p>사다리는 직접 선택한 줄이 내려가는 과정을 보여주고, 돌림판은 회전 후 포인터가 가리키는 결과를 확인할 수 있습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3>여러 언어 지원</h3>
+          <p>한국어, 영어, 일본어, 스페인어 화면을 제공해서 다양한 사용자와 함께 사용할 수 있습니다.</p>
+        </article>
+      </div>
     </section>
 
     <section class="mode-panel tool-section active" id="ladder">
@@ -39,6 +63,7 @@
         <div>
           <p class="eyebrow" data-i18n="ladderEyebrow">Ladder game</p>
           <h2 data-i18n="ladderTitle">사다리 타기</h2>
+          <p class="tool-copy">참가자와 결과를 같은 화면에서 입력하고, 위쪽 번호를 눌러 한 명씩 사다리를 탈 수 있습니다. 전체 결과는 별도 버튼으로 확인합니다.</p>
         </div>
         <button class="primary-button primary" type="button" data-action="ladder" data-i18n="ladderShuffle">사다리 섞기</button>
       </div>
@@ -65,6 +90,7 @@
         <div>
           <p class="eyebrow" data-i18n="wheelEyebrow">Spin wheel</p>
           <h2 data-i18n="wheelTitle">돌림판 추첨</h2>
+          <p class="tool-copy">같은 항목을 여러 칸으로 복제하지 않고, `커피 x2`처럼 가중치를 입력하면 하나의 큰 조각으로 표시됩니다.</p>
         </div>
       </div>
       <div class="tool-layout">
@@ -74,6 +100,7 @@
 치킨
 커피
 아이스크림
+분식
 꽝 x3
 한 번 더</textarea>
           <p class="hint" data-i18n="wheelHint"><strong>x2</strong>, <strong>*3</strong>는 조각을 여러 개 만들지 않고 그만큼 큰 조각으로 만듭니다.</p>
@@ -91,6 +118,7 @@
         <div>
           <p class="eyebrow" data-i18n="numbersEyebrow">Number draw</p>
           <h2 data-i18n="numbersTitle">범위 번호 뽑기</h2>
+          <p class="tool-copy">1번부터 30번처럼 원하는 시작 번호와 끝 번호를 정하고, 제외할 번호를 빼고 필요한 개수만 뽑을 수 있습니다.</p>
         </div>
         <button class="primary-button primary" type="button" data-action="numbers" data-i18n="drawNumbers">번호 뽑기</button>
       </div>
@@ -122,12 +150,38 @@
       <span data-i18n="resultLabel">결과</span>
       <strong id="result-text" data-result-key="initialResult">아직 추첨 전입니다.</strong>
     </section>
+
+    <section class="content-section faq-section" aria-labelledby="faq-title">
+      <div>
+        <p class="eyebrow">Guide</p>
+        <h2 id="faq-title">사용 전에 알아두면 좋은 점</h2>
+      </div>
+      <div class="faq-grid">
+        <article class="info-card">
+          <h3>어떤 상황에 쓰나요?</h3>
+          <p>방송 벌칙, 발표 순서, 회식 메뉴, 이벤트 추첨, 게임 순서, 수업 활동처럼 가벼운 무작위 선택에 맞습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3>입력한 이름이 저장되나요?</h3>
+          <p>도구 입력값은 추첨을 진행하기 위해 브라우저에서 사용됩니다. 별도 서버 데이터베이스에 저장하도록 만든 사이트가 아닙니다.</p>
+        </article>
+        <article class="info-card">
+          <h3>가중치 입력은 어떻게 하나요?</h3>
+          <p>돌림판 항목 뒤에 `x2` 또는 `*3`처럼 적으면 해당 항목이 더 큰 조각으로 표시됩니다.</p>
+        </article>
+        <article class="info-card">
+          <h3>공식 추첨에 써도 되나요?</h3>
+          <p>가벼운 선택 도구로 제공됩니다. 법적, 금융, 계약, 공식 경품 추첨처럼 검증 절차가 필요한 용도에는 별도 기준을 확인하세요.</p>
+        </article>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <a href="privacy.html">Privacy Policy</a>
     <a href="terms.html">Terms</a>
     <a href="ads.txt">Ads.txt</a>
+    <a href="tinytools-web/">TinyTools</a>
   </footer>
 
   <script src="app.js"></script>
