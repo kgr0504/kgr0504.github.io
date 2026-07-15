@@ -217,6 +217,12 @@ let wheelItems = [];
 let wheelSpinning = false;
 let wheelFrameId = 0;
 let wheelSpinToken = 0;
+let activeToolId = "ladder";
+const resultState = {
+  ladder: { key: "initialResult", text: "" },
+  wheel: { key: "initialResult", text: "" },
+  numbers: { key: "initialResult", text: "" }
+};
 
 function lines(value) {
   return String(value).split(/\r?\n|,/).map((item) => item.trim()).filter(Boolean);
@@ -324,16 +330,25 @@ function applyLanguage(lang = currentLang) {
   $$("[data-i18n-placeholder]").forEach((node) => {
     node.placeholder = t(node.dataset.i18nPlaceholder);
   });
-  if (resultText?.dataset.resultKey) {
-    resultText.textContent = t(resultText.dataset.resultKey);
-  }
+  renderToolResult(activeToolId);
   renderLadderEditor();
   drawCurrentTool($(".tool-section.active")?.id || "ladder");
 }
 
-function setResult(text) {
-  resultText.textContent = text;
-  resultText.dataset.resultKey = "";
+function renderToolResult(toolId = activeToolId) {
+  const state = resultState[toolId] || resultState.ladder;
+  resultText.textContent = state.key ? t(state.key) : state.text;
+  resultText.dataset.resultKey = state.key || "";
+}
+
+function setResult(text, toolId = activeToolId) {
+  resultState[toolId] = { key: "", text };
+  if (toolId === activeToolId) renderToolResult(toolId);
+}
+
+function setResultKey(key, toolId = activeToolId) {
+  resultState[toolId] = { key, text: "" };
+  if (toolId === activeToolId) renderToolResult(toolId);
 }
 
 function clampLadderCount(value) {
@@ -564,7 +579,7 @@ function drawLadder(highlightIndex = -1, progress = 1, reveal = false) {
 function shuffleLadder() {
   buildLadder();
   drawLadder();
-  setResult(t("ladderPrompt"));
+  setResultKey("ladderPrompt", "ladder");
 }
 
 function formatAllLadderResults(selectedIndex = -1) {
@@ -578,7 +593,7 @@ function showAllLadderResults() {
   readLadderEditor();
   if (!ladderMap.length) buildLadder();
   drawLadder(-1, 1, true);
-  setResult(`${t("allResults")}: ${formatAllLadderResults()}`);
+  setResult(`${t("allResults")}: ${formatAllLadderResults()}`, "ladder");
 }
 
 function animateLadder(startIndex) {
@@ -596,7 +611,7 @@ function animateLadder(startIndex) {
       return;
     }
     const winner = ladderMap[startIndex];
-    setResult(`${names[startIndex]} → ${winner.result}`);
+    setResult(`${names[startIndex]} → ${winner.result}`, "ladder");
   }
 
   requestAnimationFrame(step);
@@ -711,7 +726,7 @@ function runWheel() {
     }
     wheelFrameId = 0;
     wheelSpinning = false;
-    setResult(`${t("wheelResult")}: ${items[winnerIndex].label}`);
+    setResult(`${t("wheelResult")}: ${items[winnerIndex].label}`, "wheel");
   }
 
   wheelFrameId = requestAnimationFrame(step);
@@ -734,13 +749,13 @@ function runNumbers() {
   if (!picks.length) {
     numberResult.classList.remove("single");
     numberResult.textContent = t("noNumbers");
-    setResult(t("noNumbers"));
+    setResultKey("noNumbers", "numbers");
     return;
   }
 
   numberResult.classList.toggle("single", picks.length === 1);
   numberResult.innerHTML = picks.map((pick) => `<span class="ball">${pick}</span>`).join("");
-  setResult(picks.join(", "));
+  setResult(picks.join(", "), "numbers");
 }
 
 function drawAll() {
@@ -755,7 +770,6 @@ function drawCurrentTool(toolId) {
     drawLadder();
   }
   if (toolId === "wheel") drawWheel();
-  if (toolId === "numbers") runNumbers();
 }
 
 function showTool(toolId) {
@@ -767,6 +781,7 @@ function showTool(toolId) {
   if (toolId !== "wheel") {
     stopWheelSpin();
   }
+  activeToolId = toolId;
   $$(".tool-section").forEach((section) => {
     section.classList.toggle("active", section.id === toolId);
   });
@@ -774,6 +789,7 @@ function showTool(toolId) {
     tab.classList.toggle("active", tab.dataset.tool === toolId);
   });
   history.replaceState(null, "", `#${toolId}`);
+  renderToolResult(toolId);
   requestAnimationFrame(() => drawCurrentTool(toolId));
 }
 
@@ -828,6 +844,9 @@ $$(".ghost").forEach((button) => {
       $("#number-end").value = 30;
       $("#number-count").value = 1;
       $("#number-exclude").value = "";
+      numberResult.classList.remove("single");
+      numberResult.textContent = "";
+      setResultKey("initialResult", "numbers");
     }
     drawCurrentTool($(".tool-section.active")?.id || "ladder");
   });
@@ -841,7 +860,11 @@ $$(".ghost").forEach((button) => {
 });
 
 ["number-start", "number-end", "number-count", "number-exclude"].forEach((id) => {
-  $(`#${id}`).addEventListener("input", runNumbers);
+  $(`#${id}`).addEventListener("input", () => {
+    numberResult.classList.remove("single");
+    numberResult.textContent = "";
+    setResultKey("initialResult", "numbers");
+  });
 });
 
 languageSelect?.addEventListener("change", () => {
